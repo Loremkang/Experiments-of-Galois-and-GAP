@@ -21,16 +21,16 @@ GALOIS_SRC=../../Galois
 GAP_SRC=../../gapbs
 
 # folder to save the results
-GALOIS_RESULT=./galois_result
-GAP_RESULT=./gap_result
+GALOIS_RESULT=../galois_result
+GAP_RESULT=../gap_result
 
 # folder to save converted graph
 GRAPH_SRC=/ssd1/graphs/bench_experiments
 GRAPH_DST=/ssd0/galois_graphs
 
 # folder to save implementations
-GALOIS_IMP=./galois_imp
-GAP_IMP=./gap_imp
+GALOIS_IMP=../galois_imp
+GAP_IMP=../gap_imp
 
 
 ## variables
