@@ -9,7 +9,7 @@ The core running time of Galois & GAP's implementation of several important algo
 ## This experiment pack require
 
 1. Graphs represented in PBBS format.
-2. Source file of Galois & GAP (included since the original Graph Converter of Galois do not support weighted PBBS graph).
+2. Source file of Galois & GAP (I change some file to run the test. So try no to modify the directory structure).
 3. Python 2/3
 
 ## Space requirement
@@ -18,9 +18,10 @@ The core running time of Galois & GAP's implementation of several important algo
 
 ## How to Use
 
-1. modify `run_experiments.sh` for file address setup.
-2. modify `convert_graphs.sh` to included needed graphs(they should be in the src folder of `run_experiments.sh`).
-3. run `run_experiments.sh`
+1. get source code of Galois and Gap.
+2. modify `run_experiments.sh` for file address setup.
+3. modify `convert_graphs.sh` to included needed graphs(they should be in the src folder of `run_experiments.sh`).
+4. run `run_experiments.sh`
 
 (the script will do the following things)
 
