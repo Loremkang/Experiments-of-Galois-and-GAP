@@ -149,20 +149,20 @@ fi
 #
 ##
 
-call_function bc-level -singleSource -startNode=10012
+#call_function bc-level -singleSource -startNode=10012
 
-call_serial bfs -startNode=10012 -exec=SERIAL -algo=SyncTile 
+#call_serial bfs -startNode=10012 -exec=SERIAL -algo=SyncTile 
 
-call_function bfs -startNode=10012 -exec=PARALLEL -algo=SyncTile 
+#call_function bfs -startNode=10012 -exec=PARALLEL -algo=SyncTile 
 
-call_function boruvka -symmetricGraph 
+#call_function boruvka -symmetricGraph 
 
-call_function independentset -algo=edgetiledprio
+#call_function independentset -algo=edgetiledprio
 
-call_function kcore -kcore=100 -symmetricGraph -algo=Sync
+#call_function kcore -kcore=100 -symmetricGraph -algo=Sync
 
-call_function pagerank-pull -tolerance=0.000001 -maxIterations=100 -algo=Topo
+#call_function pagerank-pull -tolerance=0.000001 -maxIterations=100 -algo=Topo
 
-call_function sssp -startNode=10012 -algo=topo
+#call_function sssp -startNode=10012 -algo=topo
 
 call_function triangles -algo=orderedCount

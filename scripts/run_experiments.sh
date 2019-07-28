@@ -3,14 +3,14 @@
 
 ## config
 # process control
-CODE_REPLACE=false
-MAKE=false
+CODE_REPLACE=true
+MAKE=true
 
 
 # thread number
-NUM_THREAD=144
-ITERATIONS=5
-FORCE_REPLACE=false # or true
+NUM_THREAD=32
+ITERATIONS=1
+FORCE_REPLACE=true # or true
 PARALLEL_CONVERT=false # or true
 
 # code

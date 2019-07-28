@@ -44,8 +44,6 @@ const char* desc = "Counts the triangles in a graph";
 const char* url  = 0;
 
 std::chrono::duration<double,std::ratio<1,1000000>> time_for_preprocess, time_for_calculation;
-std::chrono::duration<double,std::ratio<1,1000000>> t1, t2, t3, t4, t5, t6;
-
 
 constexpr static const unsigned CHUNK_SIZE  = 64u;
 enum Algo {
@@ -355,19 +353,16 @@ void makeGraph(Graph& graph, const std::string& triangleFilename) {
   typedef galois::graphs::FileGraph G;
   typedef G::GraphNode N;
 
-  std::chrono::high_resolution_clock::time_point startTime = std::chrono::high_resolution_clock::now();
   G initial, permuted;
 
   initial.fromFileInterleaved<void>(inputFilename);
-  t1 = std::chrono::high_resolution_clock::now() - startTime;
 
 
   // Getting around lack of resize for deque
   std::deque<N> nodes;
   std::copy(initial.begin(), initial.end(), std::back_inserter(nodes));
 
-  t2 = std::chrono::high_resolution_clock::now() - startTime;
-
+  std::chrono::high_resolution_clock::time_point startTime = std::chrono::high_resolution_clock::now();
 
   /* Sort by degree:
    *  DegreeLess: Sorts in the ascending order of node degrees
@@ -379,20 +374,15 @@ void makeGraph(Graph& graph, const std::string& triangleFilename) {
    */
   galois::ParallelSTL::sort(nodes.begin(), nodes.end(), DegreeGreater<G>(initial));
 
-  t3 = std::chrono::high_resolution_clock::now() - startTime;
-
   std::deque<N> p;
   std::copy(nodes.begin(), nodes.end(), std::back_inserter(p));
-
-  t4 = std::chrono::high_resolution_clock::now() - startTime;
   // Transpose
   size_t idx = 0;
   for (N n : nodes) {
     p[n] = idx++;
   }
-  t5 = std::chrono::high_resolution_clock::now() - startTime;
+
   galois::graphs::permute<void>(initial, p, permuted);
-  t6 = std::chrono::high_resolution_clock::now() - startTime;
   galois::do_all(galois::iterate(permuted),
                  [&](N x) { permuted.sortEdges<void>(x, IdLess<N, void>()); });
 
@@ -432,16 +422,14 @@ int main(int argc, char** argv) {
 
   Graph graph;
 
-  
-
-  galois::preAlloc(numThreads + 16 * (graph.size() + graph.sizeEdges()) /
-                                    galois::runtime::pagePoolSize());
-  galois::reportPageAlloc("MeminfoPre");
-
   galois::StatTimer Tinitial("GraphReadingTime");
   Tinitial.start();
   readGraph(graph);
   Tinitial.stop();
+
+  galois::preAlloc(numThreads + 16 * (graph.size() + graph.sizeEdges()) /
+                                    galois::runtime::pagePoolSize());
+  galois::reportPageAlloc("MeminfoPre");
 
   
   
@@ -463,21 +451,13 @@ int main(int argc, char** argv) {
   default:
     std::cerr << "Unknown algo: " << algo << "\n";
   }
-  
   time_for_calculation = std::chrono::high_resolution_clock::now() - startTime;
+  std::cout << "time" << time_for_calculation.count + time_for_preprocess.count << std::endl;
 
-  std::cout << "preprocess time" << time_for_preprocess.count() << std::endl;
-  std::cout << "calculation time" << time_for_calculation.count() << std::endl;
-  std::cout << "t1" << t1.count() << std::endl;
-  std::cout << "t2" << t2.count() << std::endl;
-  std::cout << "t3" << t3.count() << std::endl;
-  std::cout << "t4" << t4.count() << std::endl;
-  std::cout << "t5" << t5.count() << std::endl;
-  std::cout << "t6" << t6.count() << std::endl;
 
   galois::StatTimer T;
   T.start();
-  //std::this_thread::sleep_for(time_for_calculation + time_for_preprocess);
+  std::this_thread::sleep_for(time_for_calculation + time_for_preprocess);
   T.stop();
 
   galois::reportPageAlloc("MeminfoPost");
